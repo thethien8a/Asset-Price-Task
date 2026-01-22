@@ -1,0 +1,32 @@
+asset_id,asset_code,asset_name,asset_type
+1,VESAF,VinaCapital Equity Special,fund
+2,VEOF,VinaCapital Equity Opportunity,fund
+3,VMEEF,VinaCapital Modern Economy,fund
+4,VDEF,VinaCapital Defensive,fund
+5,VIBF,VinaCapital Insight Balanced,fund
+6,VFF,VinaCapital Fixed Income,fund
+7,VCBFMGF,VCBF Midcap Growth,fund
+8,VCBFBCF,VCBF Blue Chip,fund
+9,VCBFAIF,VCBF Tactical / Aggressive,fund
+10,VCBFTBF,VCBF Tactical Balanced,fund
+11,VCBFFIF,VCBF Fixed Income,fund
+12,SSISCA,SSI Sustainable Competitive,fund
+13,VLGF,VinaCapital Liquidity Bond,fund
+14,SSIBF,SSI Bond Fund,fund
+15,DCDS,Dragon Capital Dynamic,fund
+16,DCDE,Dragon Capital Dividend,fund
+17,DCBF,Dragon Capital Bond,fund
+18,FUEVFVND,DCVFM VNDiamond ETF,etf
+19,E1VFVN30,DCVFM VN30 ETF,etf
+20,FUESSVFL,SSI VNFin Lead ETF,etf
+21,HPG,Hoa Phat Group,stock
+22,FPT,FPT Corp,stock
+23,MBB,MB Bank,stock
+24,SSI,SSI Securities,stock
+25,POW,PV Power,stock
+26,VCG,Vinaconex,stock
+27,DGC,Duc Giang Chemicals,stock
+28,VND,VNDirect,stock
+29,VTP,Viettel Post,stock
+30,GOLD_SJC,SJC Gold Bar,gold
+31,GOLD_RING,Gold Ring 9999,gold

@@ -1,0 +1,156 @@
+2026-01-22 21:08:30,164 - INFO - Processing 12 stocks/ETFs...
+2026-01-22 21:08:30,165 - INFO - Crawling stock: FUEVFVND
+2026-01-22 21:08:31,721 - ERROR - Error parsing data for FUEVFVND: Expecting value: line 1 column 1 (char 0)
+2026-01-22 21:08:32,723 - INFO - Crawling stock: E1VFVN30
+2026-01-22 21:08:33,583 - ERROR - Error parsing data for E1VFVN30: Expecting value: line 1 column 1 (char 0)
+2026-01-22 21:08:34,590 - INFO - Crawling stock: FUESSVFL
+2026-01-22 21:08:35,416 - ERROR - Error parsing data for FUESSVFL: Expecting value: line 1 column 1 (char 0)
+2026-01-22 21:08:36,416 - INFO - Crawling stock: HPG
+2026-01-22 21:08:37,101 - ERROR - Error parsing data for HPG: Expecting value: line 1 column 1 (char 0)
+2026-01-22 21:08:38,103 - INFO - Crawling stock: FPT
+2026-01-22 21:08:38,792 - ERROR - Error parsing data for FPT: Expecting value: line 1 column 1 (char 0)
+2026-01-22 21:08:39,793 - INFO - Crawling stock: MBB
+2026-01-22 21:08:40,492 - ERROR - Error parsing data for MBB: Expecting value: line 1 column 1 (char 0)
+2026-01-22 21:08:41,493 - INFO - Crawling stock: SSI
+2026-01-22 21:08:42,229 - ERROR - Error parsing data for SSI: Expecting value: line 1 column 1 (char 0)
+2026-01-22 21:08:43,230 - INFO - Crawling stock: POW
+2026-01-22 21:08:44,021 - ERROR - Error parsing data for POW: Expecting value: line 1 column 1 (char 0)
+2026-01-22 21:08:45,022 - INFO - Crawling stock: VCG
+2026-01-22 21:08:46,591 - ERROR - Error parsing data for VCG: Expecting value: line 1 column 1 (char 0)
+2026-01-22 21:08:47,592 - INFO - Crawling stock: DGC
+2026-01-22 21:08:48,253 - ERROR - Error parsing data for DGC: Expecting value: line 1 column 1 (char 0)
+2026-01-22 21:08:49,254 - INFO - Crawling stock: VND
+2026-01-22 21:08:49,904 - ERROR - Error parsing data for VND: Expecting value: line 1 column 1 (char 0)
+2026-01-22 21:08:50,905 - INFO - Crawling stock: VTP
+2026-01-22 21:08:51,908 - ERROR - Error parsing data for VTP: Expecting value: line 1 column 1 (char 0)
+2026-01-22 21:08:52,910 - INFO - Processing 17 funds...
+2026-01-22 21:08:52,910 - INFO - Crawling funds from Fmarket...
+2026-01-22 21:08:54,039 - WARNING - Request failed (Attempt 1/3): 404 Client Error:  for url: https://api.fmarket.vn/res/product/filter
+2026-01-22 21:08:57,081 - WARNING - Request failed (Attempt 2/3): 404 Client Error:  for url: https://api.fmarket.vn/res/product/filter
+2026-01-22 21:09:03,368 - WARNING - Request failed (Attempt 3/3): 404 Client Error:  for url: https://api.fmarket.vn/res/product/filter
+2026-01-22 21:09:03,368 - ERROR - Request failed after 3 attempts: https://api.fmarket.vn/res/product/filter
+2026-01-22 21:09:03,368 - INFO - Processing 2 gold assets...
+2026-01-22 21:09:03,368 - INFO - Crawling gold prices...
+2026-01-22 21:09:05,024 - WARNING - Request failed (Attempt 1/3): 436 Client Error: status code 436 for url: https://www.tygia.com/json.php?ran=0&rate=0&gold=1&bank=VIETCOM&date=now
+2026-01-22 21:09:08,812 - WARNING - Request failed (Attempt 2/3): 436 Client Error: status code 436 for url: https://www.tygia.com/json.php?ran=0&rate=0&gold=1&bank=VIETCOM&date=now
+2026-01-22 21:09:14,577 - WARNING - Request failed (Attempt 3/3): 436 Client Error: status code 436 for url: https://www.tygia.com/json.php?ran=0&rate=0&gold=1&bank=VIETCOM&date=now
+2026-01-22 21:09:14,577 - ERROR - Request failed after 3 attempts: https://www.tygia.com/json.php?ran=0&rate=0&gold=1&bank=VIETCOM&date=now
+2026-01-22 21:09:14,577 - WARNING - No data collected!
+2026-01-22 21:10:14,946 - INFO - Processing 12 stocks/ETFs...
+2026-01-22 21:10:14,946 - INFO - Crawling stock: FUEVFVND
+2026-01-22 21:10:17,321 - INFO - Crawling stock: E1VFVN30
+2026-01-22 21:10:18,671 - INFO - Crawling stock: FUESSVFL
+2026-01-22 21:10:20,177 - INFO - Crawling stock: HPG
+2026-01-22 21:10:21,696 - INFO - Crawling stock: FPT
+2026-01-22 21:10:23,188 - INFO - Crawling stock: MBB
+2026-01-22 21:10:24,712 - INFO - Crawling stock: SSI
+2026-01-22 21:10:26,229 - INFO - Crawling stock: POW
+2026-01-22 21:10:27,734 - INFO - Crawling stock: VCG
+2026-01-22 21:10:29,271 - INFO - Crawling stock: DGC
+2026-01-22 21:10:30,775 - INFO - Crawling stock: VND
+2026-01-22 21:10:33,169 - INFO - Crawling stock: VTP
+2026-01-22 21:10:34,553 - INFO - Processing 17 funds...
+2026-01-22 21:10:34,553 - INFO - Crawling funds from Fmarket...
+2026-01-22 21:10:34,997 - WARNING - Request failed (Attempt 1/3): 404 Client Error:  for url: https://api.fmarket.vn/res/product/filter
+2026-01-22 21:10:37,700 - WARNING - Request failed (Attempt 2/3): 404 Client Error:  for url: https://api.fmarket.vn/res/product/filter
+2026-01-22 21:10:42,423 - WARNING - Request failed (Attempt 3/3): 404 Client Error:  for url: https://api.fmarket.vn/res/product/filter
+2026-01-22 21:10:42,423 - ERROR - Request failed after 3 attempts: https://api.fmarket.vn/res/product/filter
+2026-01-22 21:10:42,424 - ERROR - Fmarket API Error: None
+2026-01-22 21:10:42,424 - INFO - Processing 2 gold assets...
+2026-01-22 21:10:42,424 - INFO - Crawling gold prices from Webgia...
+2026-01-22 21:10:43,206 - WARNING - Gold price not found for GOLD_RING in HTML
+2026-01-22 21:10:43,208 - INFO - Saved 13 new records to data/daily_prices.csv
+2026-01-22 21:11:45,467 - INFO - Processing 12 stocks/ETFs...
+2026-01-22 21:11:45,467 - INFO - Crawling stock: FUEVFVND
+2026-01-22 21:11:47,819 - INFO - Crawling stock: E1VFVN30
+2026-01-22 21:11:49,152 - INFO - Crawling stock: FUESSVFL
+2026-01-22 21:11:50,715 - INFO - Crawling stock: HPG
+2026-01-22 21:11:52,263 - INFO - Crawling stock: FPT
+2026-01-22 21:11:53,834 - INFO - Crawling stock: MBB
+2026-01-22 21:11:55,362 - INFO - Crawling stock: SSI
+2026-01-22 21:11:56,843 - INFO - Crawling stock: POW
+2026-01-22 21:11:58,313 - INFO - Crawling stock: VCG
+2026-01-22 21:11:59,819 - INFO - Crawling stock: DGC
+2026-01-22 21:12:01,329 - INFO - Crawling stock: VND
+2026-01-22 21:12:03,854 - INFO - Crawling stock: VTP
+2026-01-22 21:12:05,382 - INFO - Processing 17 funds...
+2026-01-22 21:12:05,382 - INFO - Crawling funds from Fmarket (Filter API)...
+2026-01-22 21:12:05,940 - WARNING - Request failed (Attempt 1/3): 404 Client Error:  for url: https://api.fmarket.vn/res/product/filter
+2026-01-22 21:12:08,691 - WARNING - Request failed (Attempt 2/3): 404 Client Error:  for url: https://api.fmarket.vn/res/product/filter
+2026-01-22 21:12:13,369 - WARNING - Request failed (Attempt 3/3): 404 Client Error:  for url: https://api.fmarket.vn/res/product/filter
+2026-01-22 21:12:13,369 - ERROR - Request failed after 3 attempts: https://api.fmarket.vn/res/product/filter
+2026-01-22 21:12:13,369 - INFO - Fallback to Fmarket Home Page API...
+2026-01-22 21:12:13,917 - WARNING - Request failed (Attempt 1/3): 404 Client Error:  for url: https://api.fmarket.vn/res/product/get-home-page-product
+2026-01-22 21:12:17,618 - WARNING - Request failed (Attempt 2/3): 404 Client Error:  for url: https://api.fmarket.vn/res/product/get-home-page-product
+2026-01-22 21:12:23,701 - WARNING - Request failed (Attempt 3/3): 404 Client Error:  for url: https://api.fmarket.vn/res/product/get-home-page-product
+2026-01-22 21:12:23,701 - ERROR - Request failed after 3 attempts: https://api.fmarket.vn/res/product/get-home-page-product
+2026-01-22 21:12:23,705 - ERROR - Failed to get fund list from all Fmarket endpoints.
+2026-01-22 21:12:23,705 - INFO - Processing 2 gold assets...
+2026-01-22 21:12:23,705 - INFO - Crawling gold prices from Webgia...
+2026-01-22 21:12:24,307 - WARNING - Gold price not found for GOLD_RING in HTML
+2026-01-22 21:12:24,325 - INFO - Saved 0 new records to data/daily_prices.csv
+2026-01-22 21:13:05,934 - INFO - Processing 12 stocks/ETFs...
+2026-01-22 21:13:05,934 - INFO - Crawling stock: FUEVFVND
+2026-01-22 21:13:07,360 - INFO - Crawling stock: E1VFVN30
+2026-01-22 21:13:08,729 - INFO - Crawling stock: FUESSVFL
+2026-01-22 21:13:10,231 - INFO - Crawling stock: HPG
+2026-01-22 21:13:11,731 - INFO - Crawling stock: FPT
+2026-01-22 21:13:13,231 - INFO - Crawling stock: MBB
+2026-01-22 21:13:14,738 - INFO - Crawling stock: SSI
+2026-01-22 21:13:16,260 - INFO - Crawling stock: POW
+2026-01-22 21:13:17,706 - INFO - Crawling stock: VCG
+2026-01-22 21:13:20,217 - INFO - Crawling stock: DGC
+2026-01-22 21:13:21,732 - INFO - Crawling stock: VND
+2026-01-22 21:13:23,345 - INFO - Crawling stock: VTP
+2026-01-22 21:13:24,876 - INFO - Processing 17 funds...
+2026-01-22 21:13:24,876 - INFO - Crawling funds from CafeF...
+2026-01-22 21:13:24,876 - INFO - Fetching fund: VESAF
+2026-01-22 21:13:26,607 - WARNING - Request failed (Attempt 1/3): 404 Client Error: Not Found for url: https://cafef.vn/404.aspx?aspxerrorpath=/DuLieu.aspx
+2026-01-22 21:13:30,053 - WARNING - Request failed (Attempt 2/3): 404 Client Error: Not Found for url: https://cafef.vn/404.aspx?aspxerrorpath=/DuLieu.aspx
+2026-01-22 21:13:36,403 - WARNING - Request failed (Attempt 3/3): 404 Client Error: Not Found for url: https://cafef.vn/404.aspx?aspxerrorpath=/DuLieu.aspx
+2026-01-22 21:13:36,403 - ERROR - Request failed after 3 attempts: https://s.cafef.vn/quyo-vesaf/thong-tin-chung.chn
+2026-01-22 21:13:36,403 - WARNING - CafeF returned None for VESAF
+2026-01-22 21:13:37,405 - INFO - Fetching fund: VEOF
+2026-01-22 21:13:38,520 - WARNING - Request failed (Attempt 1/3): 404 Client Error: Not Found for url: https://cafef.vn/404.aspx?aspxerrorpath=/DuLieu.aspx
+2026-01-22 21:13:42,059 - WARNING - Request failed (Attempt 2/3): 404 Client Error: Not Found for url: https://cafef.vn/404.aspx?aspxerrorpath=/DuLieu.aspx
+2026-01-22 21:13:47,458 - WARNING - Request failed (Attempt 3/3): 404 Client Error: Not Found for url: https://cafef.vn/404.aspx?aspxerrorpath=/DuLieu.aspx
+2026-01-22 21:13:47,458 - ERROR - Request failed after 3 attempts: https://s.cafef.vn/quyo-veof/thong-tin-chung.chn
+2026-01-22 21:13:47,458 - WARNING - CafeF returned None for VEOF
+2026-01-22 21:13:48,460 - INFO - Fetching fund: VMEEF
+2026-01-22 21:13:49,574 - WARNING - Request failed (Attempt 1/3): 404 Client Error: Not Found for url: https://cafef.vn/404.aspx?aspxerrorpath=/DuLieu.aspx
+2026-01-22 21:13:54,044 - WARNING - Request failed (Attempt 2/3): 404 Client Error: Not Found for url: https://cafef.vn/404.aspx?aspxerrorpath=/DuLieu.aspx
+2026-01-22 21:13:59,562 - WARNING - Request failed (Attempt 3/3): 404 Client Error: Not Found for url: https://cafef.vn/404.aspx?aspxerrorpath=/DuLieu.aspx
+2026-01-22 21:13:59,562 - ERROR - Request failed after 3 attempts: https://s.cafef.vn/quyo-vmeef/thong-tin-chung.chn
+2026-01-22 21:13:59,562 - WARNING - CafeF returned None for VMEEF
+2026-01-22 21:14:00,570 - INFO - Fetching fund: VDEF
+2026-01-22 21:14:01,818 - WARNING - Request failed (Attempt 1/3): 404 Client Error: Not Found for url: https://cafef.vn/404.aspx?aspxerrorpath=/DuLieu.aspx
+2026-01-22 21:14:06,296 - WARNING - Request failed (Attempt 2/3): 404 Client Error: Not Found for url: https://cafef.vn/404.aspx?aspxerrorpath=/DuLieu.aspx
+2026-01-22 21:14:12,503 - WARNING - Request failed (Attempt 3/3): 404 Client Error: Not Found for url: https://cafef.vn/404.aspx?aspxerrorpath=/DuLieu.aspx
+2026-01-22 21:14:12,503 - ERROR - Request failed after 3 attempts: https://s.cafef.vn/quyo-vdef/thong-tin-chung.chn
+2026-01-22 21:14:12,505 - WARNING - CafeF returned None for VDEF
+2026-01-22 21:14:13,507 - INFO - Fetching fund: VIBF
+2026-01-22 21:14:14,561 - WARNING - Request failed (Attempt 1/3): 404 Client Error: Not Found for url: https://cafef.vn/404.aspx?aspxerrorpath=/DuLieu.aspx
+2026-01-22 21:14:18,568 - WARNING - Request failed (Attempt 2/3): 404 Client Error: Not Found for url: https://cafef.vn/404.aspx?aspxerrorpath=/DuLieu.aspx
+2026-01-22 21:14:24,123 - WARNING - Request failed (Attempt 3/3): 404 Client Error: Not Found for url: https://cafef.vn/404.aspx?aspxerrorpath=/DuLieu.aspx
+2026-01-22 21:14:24,123 - ERROR - Request failed after 3 attempts: https://s.cafef.vn/quyo-vibf/thong-tin-chung.chn
+2026-01-22 21:14:24,123 - WARNING - CafeF returned None for VIBF
+2026-01-22 21:14:25,130 - INFO - Fetching fund: VFF
+2026-01-22 21:14:26,137 - WARNING - Request failed (Attempt 1/3): 404 Client Error: Not Found for url: https://cafef.vn/404.aspx?aspxerrorpath=/DuLieu.aspx
+2026-01-22 21:14:29,943 - WARNING - Request failed (Attempt 2/3): 404 Client Error: Not Found for url: https://cafef.vn/404.aspx?aspxerrorpath=/DuLieu.aspx
+2026-01-22 21:14:36,304 - WARNING - Request failed (Attempt 3/3): 404 Client Error: Not Found for url: https://cafef.vn/404.aspx?aspxerrorpath=/DuLieu.aspx
+2026-01-22 21:14:36,304 - ERROR - Request failed after 3 attempts: https://s.cafef.vn/quyo-vff/thong-tin-chung.chn
+2026-01-22 21:14:36,304 - WARNING - CafeF returned None for VFF
+2026-01-22 21:14:37,305 - INFO - Fetching fund: VCBFMGF
+2026-01-22 21:14:38,395 - WARNING - Request failed (Attempt 1/3): 404 Client Error: Not Found for url: https://cafef.vn/404.aspx?aspxerrorpath=/DuLieu.aspx
+2026-01-22 21:14:42,035 - WARNING - Request failed (Attempt 2/3): 404 Client Error: Not Found for url: https://cafef.vn/404.aspx?aspxerrorpath=/DuLieu.aspx
+2026-01-22 21:14:47,455 - WARNING - Request failed (Attempt 3/3): 404 Client Error: Not Found for url: https://cafef.vn/404.aspx?aspxerrorpath=/DuLieu.aspx
+2026-01-22 21:14:47,455 - ERROR - Request failed after 3 attempts: https://s.cafef.vn/quyo-vcbfmgf/thong-tin-chung.chn
+2026-01-22 21:14:47,455 - WARNING - CafeF returned None for VCBFMGF
+2026-01-22 21:14:48,457 - INFO - Fetching fund: VCBFBCF
+2026-01-22 21:14:49,542 - WARNING - Request failed (Attempt 1/3): 404 Client Error: Not Found for url: https://cafef.vn/404.aspx?aspxerrorpath=/DuLieu.aspx
+2026-01-22 21:14:53,791 - WARNING - Request failed (Attempt 2/3): 404 Client Error: Not Found for url: https://cafef.vn/404.aspx?aspxerrorpath=/DuLieu.aspx
+2026-01-22 21:14:59,774 - WARNING - Request failed (Attempt 3/3): 404 Client Error: Not Found for url: https://cafef.vn/404.aspx?aspxerrorpath=/DuLieu.aspx
+2026-01-22 21:14:59,774 - ERROR - Request failed after 3 attempts: https://s.cafef.vn/quyo-vcbfbcf/thong-tin-chung.chn
+2026-01-22 21:14:59,774 - WARNING - CafeF returned None for VCBFBCF
+2026-01-22 21:15:00,775 - INFO - Fetching fund: VCBFAIF
+2026-01-22 21:15:01,898 - WARNING - Request failed (Attempt 1/3): 404 Client Error: Not Found for url: https://cafef.vn/404.aspx?aspxerrorpath=/DuLieu.aspx
