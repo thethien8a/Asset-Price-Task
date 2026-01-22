@@ -8,23 +8,36 @@ This tool collects closing prices (for stocks/ETFs), NAV (for funds), and gold p
 
 ### Current Status (as of Jan 2026)
 
-| Asset Type | Count | Working | Source | Status |
-|------------|-------|---------|--------|--------|
-| Stocks | 9 | 9/9 | VNDirect API | 100% |
-| ETFs | 3 | 3/3 | VNDirect API | 100% |
-| Funds | 17 | 2/17 | VNDirect API | 12% |
-| Gold | 2 | 0/2 | Blocked | 0% |
-| **Total** | **31** | **14/31** | - | **45%** |
-
-**Note:** Many Vietnamese financial websites block automated requests from cloud/server IPs. The tool is designed to collect what's available and clearly report what failed.
+| Asset Type | Count | API Mode | Selenium Mode | Source |
+|------------|-------|----------|---------------|--------|
+| Stocks | 9 | 9/9 (100%) | 9/9 (100%) | VNDirect API |
+| ETFs | 3 | 3/3 (100%) | 3/3 (100%) | VNDirect API |
+| Funds | 17 | 17/17 (100%) | 17/17 (100%) | Fmarket API |
+| Gold | 2 | 0/2 (0%) | 2/2 (100%) | DOJI |
+| **Total** | **31** | **29/31 (94%)** | **31/31 (100%)** | - |
 
 ## Features
 
-- **VNDirect API Integration**: Reliable source for stocks, ETFs, and some funds
+- **Multi-Source Data Collection**: VNDirect API, Fmarket API, DOJI gold prices
 - **Smart Storage**: CSV append-only with deduplication by date
 - **Honest Reporting**: Clearly shows what data was collected vs. what failed
-- **Selenium Support**: Optional browser automation for blocked sites
+- **Selenium Support**: Optional browser automation for gold prices
 - **Retry & Logging**: Built-in error handling and detailed logs
+
+## Quick Start
+
+```bash
+# Clone and install
+git clone https://github.com/thethien8a/Asset-Price-Task
+cd Asset-Price-Task
+pip install -r requirements.txt
+
+# Run (API only - 29/31 assets)
+python -m src.main
+
+# Run with Selenium (31/31 assets including gold)
+python -m src.main --selenium
+```
 
 ## Project Structure
 
@@ -38,30 +51,26 @@ Asset-Price-Task/
 │   ├── data_schema_design.md
 │   └── automation_setup.md
 ├── src/
-│   ├── crawlers.py            # StockCrawler, FundCrawler, GoldCrawler
+│   ├── crawlers.py            # All crawlers (Stock, Fund, Gold, Selenium)
 │   ├── main.py                # Main orchestrator
 │   └── utils.py               # Request helpers, retry, logging
 ├── requirements.txt
 └── README.md
 ```
 
-## Installation & Usage
+## Usage
 
-### Requirements
-- Python 3.8+
-- Git
-
-### Installation
-```bash
-git clone https://github.com/thethien8a/Asset-Price-Task
-cd Asset-Price-Task
-pip install -r requirements.txt
-```
-
-### Run Manually
+### Basic Usage (API Only)
 ```bash
 python -m src.main
 ```
+Collects 29/31 assets (stocks, ETFs, funds). Gold requires Selenium.
+
+### Full Collection (with Selenium)
+```bash
+python -m src.main --selenium
+```
+Collects all 31/31 assets including gold prices.
 
 ### Sample Output
 ```
@@ -70,80 +79,115 @@ COLLECTION SUMMARY
 ============================================================
 
 Total assets in config: 31
-Successfully collected: 14
-Failed to collect: 17
-New records saved: 14
+Successfully collected: 31
+Failed to collect: 0
+New records saved: 31
 
-[OK] Collected (14):
-     HPG: 26,850 VND (VNDirect)
+[OK] Collected (31):
+     DCBF: 29,072 VND (Fmarket)
+     DGC: 73,800 VND (VNDirect)
      FPT: 103,500 VND (VNDirect)
+     GOLD_RING: 167,500,000 VND (Gold Crawler)
+     GOLD_SJC: 169,300,000 VND (Gold Crawler)
+     HPG: 26,850 VND (VNDirect)
      ...
-     VESAF: 36,452 VND (VNDirect)
-     VEOF: 37,702 VND (VNDirect)
-
-[XX] Failed (17):
-     GOLD_SJC (gold)
-     VCBFMGF (fund)
-     ...
+============================================================
 ```
 
-## Data Output
+## Data Sources
 
-Data is saved to `data/daily_prices.csv` in this format:
+| Source | Assets | Method | Reliability |
+|--------|--------|--------|-------------|
+| **VNDirect API** | 9 stocks, 3 ETFs | HTTP API | Excellent |
+| **Fmarket API** | 17 funds | HTTP API | Excellent |
+| **DOJI (giavang.doji.vn)** | 2 gold prices | HTTP (static HTML) | Good |
 
-| date | asset_code | price | asset_name | asset_type | source |
-|------|------------|-------|------------|------------|--------|
-| 2026-01-22 | HPG | 26850.0 | Hoa Phat Group | stock | VNDirect |
-| 2026-01-22 | VESAF | 36451.97 | VinaCapital Equity Special | fund | VNDirect |
+### Data Output
 
-## What Works
+Data is saved to `data/daily_prices.csv`:
 
-### VNDirect API (100% Working)
-- All 9 stocks: HPG, FPT, MBB, SSI, POW, VCG, DGC, VND, VTP
-- All 3 ETFs: FUEVFVND, E1VFVN30, FUESSVFL
-- 2 funds: VESAF, VEOF (listed on exchange)
+| date | asset_code | price | asset_name | asset_type | currency | source |
+|------|------------|-------|------------|------------|----------|--------|
+| 2026-01-23 | HPG | 26850.0 | Hoa Phat Group | stock | VND | VNDirect |
+| 2026-01-23 | VESAF | 36451.97 | VinaCapital Equity Special | fund | VND | Fmarket |
+| 2026-01-23 | GOLD_SJC | 169300000.0 | SJC Gold Bar | gold | VND | Gold Crawler |
 
-### Not Available via API
-Due to IP blocking/anti-bot protection:
-- 15 funds: VMEEF, VDEF, VIBF, VFF, VLGF, VCBFMGF, VCBFBCF, VCBFAIF, VCBFTBF, VCBFFIF, SSISCA, SSIBF, DCDS, DCDE, DCBF
-- 2 gold prices: GOLD_SJC, GOLD_RING
-
-## Solutions for Blocked Data
-
-1. **Use Selenium** (included in `crawlers.py`):
-   ```python
-   from src.crawlers import SeleniumFundCrawler
-   crawler = SeleniumFundCrawler()
-   results = crawler.crawl_vcbf()  # Crawl VCBF funds
-   crawler.close()
-   ```
-
-2. **Run from different network**: Home IP addresses may have better access
-
-3. **Use residential proxy**: Services like Bright Data, Oxylabs
-
-4. **Manual data entry**: Get prices from official fund manager websites
-
-## Assets Tracked
+## Assets Tracked (31 Total)
 
 ### Stocks (9)
-HPG, FPT, MBB, SSI, POW, VCG, DGC, VND, VTP
+| Code | Name |
+|------|------|
+| HPG | Hoa Phat Group |
+| FPT | FPT Corp |
+| MBB | MB Bank |
+| SSI | SSI Securities |
+| POW | PV Power |
+| VCG | Vinaconex |
+| DGC | Duc Giang Chemicals |
+| VND | VNDirect Securities |
+| VTP | Viettel Post |
 
 ### ETFs (3)
-FUEVFVND, E1VFVN30, FUESSVFL
+| Code | Name |
+|------|------|
+| FUEVFVND | DCVFM VNDiamond ETF |
+| E1VFVN30 | DCVFM VN30 ETF |
+| FUESSVFL | SSI VNFin Lead ETF |
 
 ### Open-end Funds (17)
-- VinaCapital: VESAF, VEOF, VMEEF, VDEF, VIBF, VFF, VLGF
-- VCBF: VCBFMGF, VCBFBCF, VCBFAIF, VCBFTBF, VCBFFIF
-- SSI: SSISCA, SSIBF
-- Dragon Capital: DCDS, DCDE, DCBF
+| Manager | Funds |
+|---------|-------|
+| VinaCapital | VESAF, VEOF, VMEEF, VDEF, VIBF, VFF, VLGF |
+| VCBF | VCBFMGF, VCBFBCF, VCBFAIF, VCBFTBF, VCBFFIF |
+| SSI | SSISCA, SSIBF |
+| Dragon Capital | DCDS, DCDE, DCBF |
 
 ### Gold (2)
-GOLD_SJC (SJC Gold Bar), GOLD_RING (Gold Ring 9999)
+| Code | Name | Unit |
+|------|------|------|
+| GOLD_SJC | SJC Gold Bar | VND/luong |
+| GOLD_RING | Gold Ring 9999 | VND/luong |
+
+## Technical Details
+
+### Crawlers
+
+1. **StockCrawler**: VNDirect dchart API for stocks and ETFs
+2. **FmarketCrawler**: Fmarket API for all 17 open-end funds
+3. **SeleniumGoldCrawler**: DOJI gold prices with SJC/BTMC fallback
+
+### Gold Price Extraction
+
+Gold prices from DOJI are shown in `nghìn/chỉ` (thousand VND per chi):
+- 1 lượng = 10 chỉ
+- Price per lượng = displayed_price × 10 × 1000
+
+Example: `16,930` nghìn/chỉ = 169,300,000 VND/lượng
+
+### Fallback Chain for Gold
+
+```
+DOJI (HTTP) → SJC (Selenium) → BTMC (Selenium)
+```
+
+DOJI is preferred as it provides static HTML (no JavaScript rendering needed).
+
+## Automation
+
+See `docs/automation_setup.md` for:
+- Windows Task Scheduler setup
+- Linux cron setup
+- GitHub Actions workflow
+
+## Requirements
+
+- Python 3.8+
+- Chrome browser (for Selenium mode)
+- Dependencies: `requests`, `selenium`, `webdriver-manager`
 
 ## Contributing
 
-If you find a working data source for the blocked assets, please update `src/crawlers.py` and submit a PR.
+Contributions welcome! If you find a better data source or improve the crawlers, please submit a PR.
 
 ---
-*Built with Python. Data sources: VNDirect API.*
+*Built with Python. Data sources: VNDirect, Fmarket, DOJI.*

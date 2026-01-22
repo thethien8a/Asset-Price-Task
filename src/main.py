@@ -8,7 +8,9 @@ This script collects prices for Vietnamese financial assets:
 - Gold (2): SJC Gold Bar, Gold Ring 9999
 
 Usage:
-    python -m src.main
+    python -m src.main              # Basic mode (VNDirect only)
+    python -m src.main --selenium   # Full mode with browser automation
+    python -m src.main --headful    # Selenium with visible browser (for debugging)
 
 Output:
     - data/daily_prices.csv (append-only, deduplicated by date+asset)
@@ -17,9 +19,11 @@ Output:
 
 import csv
 import os
+import sys
+import argparse
 import logging
 from datetime import datetime
-from src.crawlers import StockCrawler, FundCrawler, GoldCrawler
+from src.crawlers import StockCrawler, FundCrawler, FmarketCrawler, GoldCrawler
 
 # Setup constants
 DATA_FILE = 'data/daily_prices.csv'
@@ -70,10 +74,69 @@ def save_data(new_data):
     return count
 
 
+def run_selenium_crawlers(fund_assets, gold_assets, headless=True):
+    """
+    Run Selenium-based crawlers for blocked fund and gold sources.
+    
+    Args:
+        fund_assets: List of fund assets to crawl
+        gold_assets: List of gold assets to crawl
+        headless: Run browser in headless mode (default True)
+        
+    Returns:
+        Tuple of (fund_results, gold_results)
+    """
+    fund_results = []
+    gold_results = []
+    
+    try:
+        from src.crawlers import SeleniumFundCrawler, SeleniumGoldCrawler
+    except ImportError:
+        logging.error("Selenium crawlers not available. Run: pip install selenium webdriver-manager")
+        return fund_results, gold_results
+    
+    # Filter funds that need Selenium (not available on VNDirect)
+    vndirect_funds = ['VESAF', 'VEOF']
+    selenium_fund_assets = [a for a in fund_assets if a['asset_code'] not in vndirect_funds]
+    
+    if selenium_fund_assets:
+        print(f"\n[Selenium] Crawling {len(selenium_fund_assets)} blocked funds...")
+        try:
+            with SeleniumFundCrawler(headless=headless) as crawler:
+                fund_results = crawler.crawl(selenium_fund_assets)
+        except Exception as e:
+            logging.error(f"Selenium fund crawler failed: {e}")
+    
+    if gold_assets:
+        print(f"\n[Selenium] Crawling {len(gold_assets)} gold prices...")
+        try:
+            with SeleniumGoldCrawler(headless=headless) as crawler:
+                gold_results = crawler.crawl(gold_assets)
+        except Exception as e:
+            logging.error(f"Selenium gold crawler failed: {e}")
+    
+    return fund_results, gold_results
+
+
 def main():
     """Main execution function."""
+    # Parse command line arguments
+    parser = argparse.ArgumentParser(description='Daily Asset Price Collection Tool')
+    parser.add_argument('--selenium', action='store_true', 
+                        help='Use Selenium for blocked fund/gold sources')
+    parser.add_argument('--headful', action='store_true',
+                        help='Run Selenium with visible browser (for debugging)')
+    args = parser.parse_args()
+    
+    use_selenium = args.selenium or args.headful
+    headless = not args.headful
+    
     print("=" * 60)
     print("Daily Asset Price Collection Tool")
+    if use_selenium:
+        print(f"Mode: SELENIUM ({'headless' if headless else 'visible browser'})")
+    else:
+        print("Mode: API ONLY (use --selenium for full coverage)")
     print("=" * 60)
     
     assets = load_assets(ASSETS_FILE)
@@ -119,20 +182,65 @@ def main():
     # 3. Funds
     if fund_assets:
         print(f"\n[3/4] Fetching {len(fund_assets)} funds...")
-        crawler = FundCrawler()
-        results = crawler.crawl(fund_assets)
-        all_results.extend(results)
-        collected.extend([r['asset_code'] for r in results])
-        failed.extend([a['asset_code'] for a in fund_assets if a['asset_code'] not in [r['asset_code'] for r in results]])
+        
+        # Primary: Use Fmarket API (works for ALL funds!)
+        print("  Using Fmarket API...")
+        fmarket_crawler = FmarketCrawler()
+        fmarket_results = fmarket_crawler.crawl(fund_assets)
+        all_results.extend(fmarket_results)
+        collected.extend([r['asset_code'] for r in fmarket_results])
+        
+        fmarket_collected = [r['asset_code'] for r in fmarket_results]
+        
+        # Fallback 1: Try VNDirect for any funds not in Fmarket
+        remaining = [a for a in fund_assets if a['asset_code'] not in fmarket_collected]
+        if remaining:
+            print(f"  Trying VNDirect for {len(remaining)} remaining funds...")
+            vnd_crawler = FundCrawler()
+            vnd_results = vnd_crawler.crawl(remaining)
+            all_results.extend(vnd_results)
+            collected.extend([r['asset_code'] for r in vnd_results])
+        
+        # Fallback 2: Selenium if enabled and funds still missing
+        if use_selenium:
+            remaining_for_selenium = [a for a in fund_assets if a['asset_code'] not in collected]
+            if remaining_for_selenium:
+                print(f"  Using Selenium for {len(remaining_for_selenium)} remaining funds...")
+                selenium_fund_results, _ = run_selenium_crawlers(remaining_for_selenium, [], headless)
+                all_results.extend(selenium_fund_results)
+                collected.extend([r['asset_code'] for r in selenium_fund_results])
+        
+        # Update failed list
+        all_collected_funds = [r['asset_code'] for r in all_results if asset_info_get(fund_assets, r['asset_code'])]
+        failed.extend([a['asset_code'] for a in fund_assets if a['asset_code'] not in all_collected_funds])
         
     # 4. Gold
     if gold_assets:
         print(f"\n[4/4] Fetching {len(gold_assets)} gold prices...")
+        
+        # First try regular crawler
         crawler = GoldCrawler()
         results = crawler.crawl(gold_assets)
         all_results.extend(results)
         collected.extend([r['asset_code'] for r in results])
-        failed.extend([a['asset_code'] for a in gold_assets if a['asset_code'] not in [r['asset_code'] for r in results]])
+        
+        gold_collected = [r['asset_code'] for r in results]
+        
+        # If Selenium mode and some gold prices missing, try Selenium
+        if use_selenium:
+            remaining_gold = [a for a in gold_assets if a['asset_code'] not in gold_collected]
+            if remaining_gold:
+                _, selenium_gold_results = run_selenium_crawlers([], remaining_gold, headless)
+                all_results.extend(selenium_gold_results)
+                collected.extend([r['asset_code'] for r in selenium_gold_results])
+        
+        # Update failed list for gold
+        all_collected_gold = [r['asset_code'] for r in all_results if r['asset_code'].startswith('GOLD_')]
+        failed.extend([a['asset_code'] for a in gold_assets if a['asset_code'] not in all_collected_gold])
+    
+    # Remove duplicates from failed (in case of re-processing)
+    collected = list(dict.fromkeys(collected))
+    failed = [f for f in list(dict.fromkeys(failed)) if f not in collected]
     
     # Enrich data (add name, type, etc.)
     final_data = []
@@ -176,19 +284,22 @@ def main():
             asset_type = asset_info_map.get(code, {}).get('asset_type', 'unknown')
             print(f"     {code} ({asset_type})")
         
-        print("\n[!] Some assets could not be collected because:")
-        print("    - Fund manager websites (VinaCapital, VCBF, SSIAM, Dragon Capital)")
-        print("      block automated requests from this IP")
-        print("    - Gold price websites (SJC, BTMC) have anti-bot protection")
-        print("\n[!] Solutions:")
-        print("    1. Use Selenium with a real browser (see SeleniumFundCrawler)")
-        print("    2. Use a residential proxy service")
-        print("    3. Run the script from a different network")
-        print("    4. Enter data manually from official sources")
+        print("\n[!] Some assets could not be collected.")
+        print("    Possible reasons:")
+        print("    - API returned no data for this asset")
+        print("    - Gold price websites have anti-bot protection")
+        if not use_selenium:
+            print("\n[!] Try running with --selenium flag for gold prices:")
+            print("    python -m src.main --selenium")
     
     print("\n" + "=" * 60)
     
     return len(collected), len(failed)
+
+
+def asset_info_get(assets, code):
+    """Helper to check if code exists in asset list."""
+    return any(a['asset_code'] == code for a in assets)
 
 
 if __name__ == "__main__":
