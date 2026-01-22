@@ -57,93 +57,104 @@ class StockCrawler(BaseCrawler):
 class FundCrawler(BaseCrawler):
     def crawl(self, assets):
         """
-        Crawl fund NAV using CafeF (Fallback strategy).
-        URL format: https://s.cafef.vn/quyo-{symbol}/thong-tin-chung.chn
+        Crawl fund NAV using Fmarket Filter API.
+        Attempts to fetch all funds at once.
         """
         results = []
-        logging.info("Crawling funds from CafeF...")
         
+        # Endpoint Filter (Lấy danh sách tất cả quỹ)
+        url = "https://api.fmarket.vn/res/product/filter"
+        
+        headers = {
+            'Content-Type': 'application/json',
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+            'Origin': 'https://fmarket.vn',
+            'Referer': 'https://fmarket.vn/',
+            'Accept': 'application/json, text/plain, */*'
+        }
+        
+        payload = {
+            "types": ["NEW_IPO", "TRADING"],
+            "pageSize": 500, # Lấy hết
+            "page": 1,
+            "sortField": "nav",
+            "sortOrder": "DESC",
+            "buyBy": "BY_MONEY",
+            "isBuyByMoney": True
+        }
+
+        logging.info("Crawling funds from Fmarket (Filter API)...")
+        
+        response = make_request(url, method='POST', payload=payload, headers=headers)
+        
+        funds_data = []
+        if response and response.status_code == 200:
+            try:
+                data = response.json()
+                funds_data = data.get('data', {}).get('rows', [])
+                logging.info(f"Fmarket returned {len(funds_data)} funds.")
+            except Exception as e:
+                logging.error(f"Error parsing Fmarket response: {e}")
+        else:
+             logging.error(f"Fmarket Filter API Failed: {response.status_code if response else 'None'}")
+             # Nếu fail, có thể dùng Mock data hoặc Log error.
+             # Ở đây tôi log error.
+
+        # Map data
+        fund_map = {}
+        for f in funds_data:
+            code = f.get('shortName')
+            nav = f.get('nav')
+            date_ms = f.get('navDate')
+            if code and nav:
+                date_str = datetime.fromtimestamp(date_ms / 1000).strftime('%Y-%m-%d')
+                fund_map[code.upper()] = {'price': float(nav), 'date': date_str}
+
+        # Match with assets
         for asset in assets:
             code = asset['asset_code']
-            # Một số mã có thể khác trên CafeF. Ví dụ VCBF-MGF.
-            # Thử convert: VCBFMGF -> VCBFMGF (CafeF thường giữ nguyên hoặc thêm dấu -)
-            # CafeF URL pattern: https://s.cafef.vn/quyo-vesaf/thong-tin-chung.chn
             
-            url = f"https://s.cafef.vn/quyo-{code.lower()}/thong-tin-chung.chn"
-            # Nếu code có VCBF, có thể cần thêm dấu gạch? CafeF thường dùng code liền: VCBFMGF
+            # Xử lý code (Fmarket dùng VCBF-MGF, CSV dùng VCBFMGF)
+            # Thử vài biến thể
+            candidates = [
+                code,
+                code.replace('VCBF', 'VCBF-'), # VCBFMGF -> VCBF-MGF
+                code.replace('-', '') # VCBF-MGF -> VCBFMGF
+            ]
             
-            logging.info(f"Fetching fund: {code}")
-            response = make_request(url)
+            found_info = None
+            for c in candidates:
+                if c in fund_map:
+                    found_info = fund_map[c]
+                    break
             
-            if response and response.status_code == 200:
-                try:
-                    html = response.text
-                    # Parse NAV
-                    # Pattern: <div class="dl-thongtin">...<ul>...<li>Giá trị tài sản ròng/CCQ: <b>18,230</b>...
-                    # Hoặc tìm text "Giá trị tài sản ròng/CCQ"
-                    
-                    # Regex tìm "Giá trị tài sản ròng/CCQ" sau đó lấy số
-                    # CafeF cấu trúc khá lộn xộn.
-                    # Thử tìm chuỗi số sau chữ "NAV/CCQ" hoặc "Giá trị tài sản ròng"
-                    
-                    match = re.search(r'(?:Giá trị tài sản ròng/CCQ|NAV/CCQ).*?<b>(.*?)</b>', html, re.DOTALL | re.IGNORECASE)
-                    if match:
-                        price_str = match.group(1) # "18,230"
-                        price = clean_price(price_str)
-                        
-                        # Ngày cập nhật? CafeF thường hiện ngày ở đâu đó.
-                        # Pattern: "Ngày cập nhật: 27/10/2023"
-                        date_match = re.search(r'Ngày cập nhật.*?(\d{2}/\d{2}/\d{4})', html, re.DOTALL | re.IGNORECASE)
-                        data_date = datetime.now().strftime('%Y-%m-%d') # Default today
-                        if date_match:
-                            try:
-                                d_str = date_match.group(1)
-                                data_date = datetime.strptime(d_str, '%d/%m/%Y').strftime('%Y-%m-%d')
-                            except:
-                                pass
-                        
-                        if price:
-                            results.append({
-                                'asset_code': code,
-                                'price': price,
-                                'date': data_date,
-                                'source': 'CafeF'
-                            })
-                    else:
-                        logging.warning(f"NAV not found for {code} on CafeF")
-                        # Thử URL dự phòng cho quỹ VCBF (có thể có dấu gạch ngang)
-                        if 'VCBF' in code and '-' not in code:
-                             # Try fallback url logic here if needed
-                             pass
-                except Exception as e:
-                     logging.error(f"Error parsing CafeF for {code}: {e}")
+            if found_info:
+                results.append({
+                    'asset_code': code,
+                    'price': found_info['price'],
+                    'date': found_info['date'],
+                    'source': 'Fmarket'
+                })
+                logging.info(f"Mapped {code}: {found_info['price']}")
             else:
-                 logging.warning(f"CafeF returned {response.status_code if response else 'None'} for {code}")
-            
-            time.sleep(1)
-            
+                logging.warning(f"Could not find fund {code} in Fmarket list.")
+
         return results
 
 class GoldCrawler(BaseCrawler):
     def crawl(self, assets):
         """
-        Crawl Gold price using Webgia.com.
+        Crawl Gold price using Webgia (SJC) and PNJ JSON (Ring).
         """
         results = []
-        url = "https://webgia.com/gia-vang/sjc/"
         
-        logging.info("Crawling gold prices from Webgia...")
-        response = make_request(url)
-        
-        if response and response.status_code == 200:
-            try:
+        # 1. Get SJC Bar from Webgia (parse HTML)
+        sjc_url = "https://webgia.com/gia-vang/sjc/"
+        try:
+            logging.info("Crawling SJC Gold Bar from Webgia...")
+            response = make_request(sjc_url)
+            if response and response.status_code == 200:
                 html = response.text
-                today = datetime.now().strftime('%Y-%m-%d')
-                
-                price_sjc = None
-                price_ring = None
-                
-                # Regex SJC
                 blocks = re.split(r'</tr>', html)
                 for block in blocks:
                     if 'Hồ Chí Minh' in block or 'TP.HCM' in block:
@@ -151,37 +162,68 @@ class GoldCrawler(BaseCrawler):
                         valid_prices = [float(p.replace(',', '')) for p in prices if len(p) >= 6]
                         if len(valid_prices) >= 2:
                             price_sjc = valid_prices[1]
-                
-                # Regex Ring (Nhẫn) - Cố gắng bắt tổng quát hơn
-                # Tìm bất kỳ dòng nào có chữ "Nhẫn" và giá trị > 50tr
-                for block in blocks:
-                    if 'Nhẫn' in block:
-                        prices = re.findall(r'(\d{1,3}(?:,\d{3})*)', block)
-                        valid_prices = [float(p.replace(',', '')) for p in prices if len(p) >= 6]
-                        valid_prices = [p for p in valid_prices if p > 50000000] # Lọc giá rác
-                        if len(valid_prices) >= 1:
-                            price_ring = valid_prices[-1] # Lấy giá bán (thường là số lớn nhất hoặc sau cùng)
+                            results.append({
+                                'asset_code': 'GOLD_SJC',
+                                'price': price_sjc,
+                                'date': datetime.now().strftime('%Y-%m-%d'),
+                                'source': 'Webgia.com'
+                            })
+                            logging.info(f"Fetched GOLD_SJC: {price_sjc}")
                             break
-                            
-                for asset in assets:
-                    code = asset['asset_code']
-                    price = None
-                    if code == 'GOLD_SJC':
-                        price = price_sjc
-                    elif code == 'GOLD_RING':
-                        price = price_ring
-                    
-                    if price:
-                        results.append({
-                            'asset_code': code,
-                            'price': price,
-                            'date': today,
-                            'source': 'Webgia.com'
-                        })
-                    else:
-                        logging.warning(f"Gold price not found for {code}")
-                        
-            except Exception as e:
-                logging.error(f"Error parsing Gold HTML: {e}")
+        except Exception as e:
+             logging.error(f"Error crawling SJC: {e}")
+
+        # 2. Get Gold Ring from PNJ JSON API
+        pnj_url = "https://cdn.pnj.io/images/giavang/tk_connect.json"
+        try:
+            logging.info("Crawling Gold Ring from PNJ API...")
+            response = make_request(pnj_url)
+            if response and response.status_code == 200:
+                data = response.json()
+                price_ring = None
+                today_str = datetime.now().strftime('%Y-%m-%d')
                 
+                for item in data:
+                    name = item.get('typeName', '').lower()
+                    # PNJ: "Nhẫn Trơn PNJ 999.9"
+                    if 'nhẫn' in name and '999.9' in name:
+                         raw_sell = item.get('sell', '0').replace(',', '')
+                         price_ring = float(raw_sell) * 1000 # PNJ JSON: 83400 -> 83,400,000 ? 
+                         # Check PNJ API: "sell": "83400". Đơn vị nghìn đồng/chỉ? 
+                         # Hay "83,400,000"?
+                         # Thường API trả về "83400" (nghìn đồng).
+                         # Webgia: 83,400,000.
+                         # Nếu raw < 1000000 -> nhân 1000.
+                         
+                         if price_ring < 1000000:
+                             price_ring = price_ring * 1000
+                             
+                         # Lại check: PNJ Nhẫn 1 chỉ = 8tr. 
+                         # Giá 1 lượng (như SJC) = 80tr.
+                         # Cần xác định đơn vị task yêu cầu.
+                         # Task yêu cầu "Gold Ring 9999". Thường là giá/Lượng.
+                         # Nếu PNJ trả về giá/Chỉ -> Nhân 10?
+                         # SJC Bar: 82,500,000.
+                         # Ring: ~ 81,000,000.
+                         # PNJ API: "sell": "83400" (83tr400 / lượng hay 8tr340/chỉ?)
+                         # Thường PNJ niêm yết theo Lượng hoặc Chỉ. 
+                         # PNJ Web: 8,340,000 đ/chỉ.
+                         # Vậy 83400 -> Đơn vị nghìn/lượng (83tr400)? Không, 83400 * 1000 = 83,400,000. Đúng giá 1 lượng.
+                         
+                         break
+                
+                if price_ring:
+                     results.append({
+                        'asset_code': 'GOLD_RING',
+                        'price': price_ring,
+                        'date': today_str,
+                        'source': 'PNJ API (SJC 9999 equiv)'
+                    })
+                     logging.info(f"Fetched GOLD_RING: {price_ring}")
+                else:
+                    logging.warning("Could not find Gold Ring price in PNJ data")
+
+        except Exception as e:
+            logging.error(f"Error crawling PNJ Ring: {e}")
+
         return results

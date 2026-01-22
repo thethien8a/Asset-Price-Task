@@ -154,3 +154,102 @@
 2026-01-22 21:14:59,774 - WARNING - CafeF returned None for VCBFBCF
 2026-01-22 21:15:00,775 - INFO - Fetching fund: VCBFAIF
 2026-01-22 21:15:01,898 - WARNING - Request failed (Attempt 1/3): 404 Client Error: Not Found for url: https://cafef.vn/404.aspx?aspxerrorpath=/DuLieu.aspx
+2026-01-22 21:29:03,620 - INFO - Processing 12 stocks/ETFs...
+2026-01-22 21:29:03,620 - INFO - Crawling stock: FUEVFVND
+2026-01-22 21:29:06,004 - INFO - Crawling stock: E1VFVN30
+2026-01-22 21:29:07,347 - INFO - Crawling stock: FUESSVFL
+2026-01-22 21:29:08,782 - INFO - Crawling stock: HPG
+2026-01-22 21:29:10,238 - INFO - Crawling stock: FPT
+2026-01-22 21:29:11,560 - INFO - Crawling stock: MBB
+2026-01-22 21:29:12,902 - INFO - Crawling stock: SSI
+2026-01-22 21:29:14,231 - INFO - Crawling stock: POW
+2026-01-22 21:29:15,547 - INFO - Crawling stock: VCG
+2026-01-22 21:29:16,876 - INFO - Crawling stock: DGC
+2026-01-22 21:29:18,226 - INFO - Crawling stock: VND
+2026-01-22 21:29:20,597 - INFO - Crawling stock: VTP
+2026-01-22 21:29:21,938 - INFO - Processing 17 funds...
+2026-01-22 21:29:21,938 - INFO - Crawling funds from Fmarket (Direct API)...
+2026-01-22 21:29:22,348 - WARNING - Request failed (Attempt 1/3): 404 Client Error:  for url: https://api.fmarket.vn/res/product/get-product-detail/20
+2026-01-22 21:29:25,093 - WARNING - Request failed (Attempt 2/3): 404 Client Error:  for url: https://api.fmarket.vn/res/product/get-product-detail/20
+2026-01-22 21:29:30,112 - WARNING - Request failed (Attempt 3/3): 404 Client Error:  for url: https://api.fmarket.vn/res/product/get-product-detail/20
+2026-01-22 21:29:30,112 - ERROR - Request failed after 3 attempts: https://api.fmarket.vn/res/product/get-product-detail/20
+2026-01-22 21:29:30,113 - WARNING - Failed to fetch VESAF from Fmarket
+2026-01-22 21:29:30,961 - WARNING - Request failed (Attempt 1/3): 404 Client Error:  for url: https://api.fmarket.vn/res/product/get-product-detail/21
+2026-01-22 21:29:34,165 - WARNING - Request failed (Attempt 2/3): 404 Client Error:  for url: https://api.fmarket.vn/res/product/get-product-detail/21
+2026-01-22 21:29:40,225 - WARNING - Request failed (Attempt 3/3): 404 Client Error:  for url: https://api.fmarket.vn/res/product/get-product-detail/21
+2026-01-22 21:29:40,225 - ERROR - Request failed after 3 attempts: https://api.fmarket.vn/res/product/get-product-detail/21
+2026-01-22 21:29:40,226 - WARNING - Failed to fetch VEOF from Fmarket
+2026-01-22 21:29:41,289 - WARNING - Request failed (Attempt 1/3): 404 Client Error:  for url: https://api.fmarket.vn/res/product/get-product-detail/84
+2026-01-22 21:29:44,265 - WARNING - Request failed (Attempt 2/3): 404 Client Error:  for url: https://api.fmarket.vn/res/product/get-product-detail/84
+2026-01-22 21:29:50,325 - WARNING - Request failed (Attempt 3/3): 404 Client Error:  for url: https://api.fmarket.vn/res/product/get-product-detail/84
+2026-01-22 21:29:50,325 - ERROR - Request failed after 3 attempts: https://api.fmarket.vn/res/product/get-product-detail/84
+2026-01-22 21:29:50,328 - WARNING - Failed to fetch VMEEF from Fmarket
+2026-01-22 21:29:51,393 - WARNING - Request failed (Attempt 1/3): 404 Client Error:  for url: https://api.fmarket.vn/res/product/get-product-detail/98
+2026-01-22 21:29:55,029 - WARNING - Request failed (Attempt 2/3): 404 Client Error:  for url: https://api.fmarket.vn/res/product/get-product-detail/98
+2026-01-22 21:30:00,461 - WARNING - Request failed (Attempt 3/3): 404 Client Error:  for url: https://api.fmarket.vn/res/product/get-product-detail/98
+2026-01-22 21:30:00,461 - ERROR - Request failed after 3 attempts: https://api.fmarket.vn/res/product/get-product-detail/98
+2026-01-22 21:30:00,462 - WARNING - Failed to fetch VDEF from Fmarket
+2026-01-22 21:30:01,609 - WARNING - Request failed (Attempt 1/3): 404 Client Error:  for url: https://api.fmarket.vn/res/product/get-product-detail/24
+2026-01-22 21:30:04,205 - WARNING - Request failed (Attempt 2/3): 404 Client Error:  for url: https://api.fmarket.vn/res/product/get-product-detail/24
+2026-01-22 21:30:10,427 - WARNING - Request failed (Attempt 3/3): 404 Client Error:  for url: https://api.fmarket.vn/res/product/get-product-detail/24
+2026-01-22 21:30:10,427 - ERROR - Request failed after 3 attempts: https://api.fmarket.vn/res/product/get-product-detail/24
+2026-01-22 21:30:10,429 - WARNING - Failed to fetch VIBF from Fmarket
+2026-01-22 21:30:11,486 - WARNING - Request failed (Attempt 1/3): 404 Client Error:  for url: https://api.fmarket.vn/res/product/get-product-detail/25
+2026-01-22 21:30:14,870 - WARNING - Request failed (Attempt 2/3): 404 Client Error:  for url: https://api.fmarket.vn/res/product/get-product-detail/25
+2026-01-22 21:30:20,998 - WARNING - Request failed (Attempt 3/3): 404 Client Error:  for url: https://api.fmarket.vn/res/product/get-product-detail/25
+2026-01-22 21:30:20,998 - ERROR - Request failed after 3 attempts: https://api.fmarket.vn/res/product/get-product-detail/25
+2026-01-22 21:30:20,999 - WARNING - Failed to fetch VFF from Fmarket
+2026-01-22 21:30:22,044 - WARNING - Request failed (Attempt 1/3): 404 Client Error:  for url: https://api.fmarket.vn/res/product/get-product-detail/29
+2026-01-22 21:30:24,856 - WARNING - Request failed (Attempt 2/3): 404 Client Error:  for url: https://api.fmarket.vn/res/product/get-product-detail/29
+2026-01-22 21:30:29,482 - WARNING - Request failed (Attempt 3/3): 404 Client Error:  for url: https://api.fmarket.vn/res/product/get-product-detail/29
+2026-01-22 21:30:29,482 - ERROR - Request failed after 3 attempts: https://api.fmarket.vn/res/product/get-product-detail/29
+2026-01-22 21:30:29,482 - WARNING - Failed to fetch VCBFMGF from Fmarket
+2026-01-22 21:30:30,505 - WARNING - Request failed (Attempt 1/3): 404 Client Error:  for url: https://api.fmarket.vn/res/product/get-product-detail/28
+2026-01-22 21:30:34,094 - WARNING - Request failed (Attempt 2/3): 404 Client Error:  for url: https://api.fmarket.vn/res/product/get-product-detail/28
+2026-01-22 21:30:40,502 - WARNING - Request failed (Attempt 3/3): 404 Client Error:  for url: https://api.fmarket.vn/res/product/get-product-detail/28
+2026-01-22 21:30:40,502 - ERROR - Request failed after 3 attempts: https://api.fmarket.vn/res/product/get-product-detail/28
+2026-01-22 21:30:40,503 - WARNING - Failed to fetch VCBFBCF from Fmarket
+2026-01-22 21:30:41,551 - WARNING - Request failed (Attempt 1/3): 404 Client Error:  for url: https://api.fmarket.vn/res/product/get-product-detail/30
+2026-01-22 21:30:44,928 - WARNING - Request failed (Attempt 2/3): 404 Client Error:  for url: https://api.fmarket.vn/res/product/get-product-detail/30
+2026-01-22 21:30:50,325 - WARNING - Request failed (Attempt 3/3): 404 Client Error:  for url: https://api.fmarket.vn/res/product/get-product-detail/30
+2026-01-22 21:30:50,327 - ERROR - Request failed after 3 attempts: https://api.fmarket.vn/res/product/get-product-detail/30
+2026-01-22 21:30:50,327 - WARNING - Failed to fetch VCBFAIF from Fmarket
+2026-01-22 21:30:51,440 - WARNING - Request failed (Attempt 1/3): 404 Client Error:  for url: https://api.fmarket.vn/res/product/get-product-detail/27
+2026-01-22 21:30:55,982 - WARNING - Request failed (Attempt 2/3): 404 Client Error:  for url: https://api.fmarket.vn/res/product/get-product-detail/27
+2026-01-22 21:31:01,432 - WARNING - Request failed (Attempt 3/3): 404 Client Error:  for url: https://api.fmarket.vn/res/product/get-product-detail/27
+2026-01-22 21:31:01,432 - ERROR - Request failed after 3 attempts: https://api.fmarket.vn/res/product/get-product-detail/27
+2026-01-22 21:31:01,433 - WARNING - Failed to fetch VCBFTBF from Fmarket
+2026-01-22 21:31:02,492 - WARNING - Request failed (Attempt 1/3): 404 Client Error:  for url: https://api.fmarket.vn/res/product/get-product-detail/26
+2026-01-22 21:32:10,628 - INFO - Processing 17 funds...
+2026-01-22 21:32:10,628 - INFO - Crawling funds from Fmarket (Filter API)...
+2026-01-22 21:32:12,087 - WARNING - Request failed (Attempt 1/3): 404 Client Error:  for url: https://api.fmarket.vn/res/product/filter
+2026-01-22 21:32:14,735 - WARNING - Request failed (Attempt 2/3): 404 Client Error:  for url: https://api.fmarket.vn/res/product/filter
+2026-01-22 21:32:19,913 - WARNING - Request failed (Attempt 3/3): 404 Client Error:  for url: https://api.fmarket.vn/res/product/filter
+2026-01-22 21:32:19,913 - ERROR - Request failed after 3 attempts: https://api.fmarket.vn/res/product/filter
+2026-01-22 21:32:19,916 - ERROR - Fmarket Filter API Failed: None
+2026-01-22 21:32:19,916 - WARNING - Could not find fund VESAF in Fmarket list.
+2026-01-22 21:32:19,916 - WARNING - Could not find fund VEOF in Fmarket list.
+2026-01-22 21:32:19,916 - WARNING - Could not find fund VMEEF in Fmarket list.
+2026-01-22 21:32:19,916 - WARNING - Could not find fund VDEF in Fmarket list.
+2026-01-22 21:32:19,916 - WARNING - Could not find fund VIBF in Fmarket list.
+2026-01-22 21:32:19,916 - WARNING - Could not find fund VFF in Fmarket list.
+2026-01-22 21:32:19,916 - WARNING - Could not find fund VCBFMGF in Fmarket list.
+2026-01-22 21:32:19,916 - WARNING - Could not find fund VCBFBCF in Fmarket list.
+2026-01-22 21:32:19,916 - WARNING - Could not find fund VCBFAIF in Fmarket list.
+2026-01-22 21:32:19,916 - WARNING - Could not find fund VCBFTBF in Fmarket list.
+2026-01-22 21:32:19,916 - WARNING - Could not find fund VCBFFIF in Fmarket list.
+2026-01-22 21:32:19,916 - WARNING - Could not find fund SSISCA in Fmarket list.
+2026-01-22 21:32:19,916 - WARNING - Could not find fund VLGF in Fmarket list.
+2026-01-22 21:32:19,916 - WARNING - Could not find fund SSIBF in Fmarket list.
+2026-01-22 21:32:19,917 - WARNING - Could not find fund DCDS in Fmarket list.
+2026-01-22 21:32:19,917 - WARNING - Could not find fund DCDE in Fmarket list.
+2026-01-22 21:32:19,917 - WARNING - Could not find fund DCBF in Fmarket list.
+2026-01-22 21:32:19,917 - INFO - Processing 1 gold assets...
+2026-01-22 21:32:19,917 - INFO - Crawling SJC Gold Bar from Webgia...
+2026-01-22 21:32:20,622 - INFO - Fetched GOLD_SJC: 255255255.0
+2026-01-22 21:32:20,622 - INFO - Crawling Gold Ring from PNJ API...
+2026-01-22 21:32:41,407 - WARNING - Request failed (Attempt 1/3): 403 Client Error: Forbidden for url: https://cdn.pnj.io/images/giavang/tk_connect.json
+2026-01-22 21:33:14,187 - WARNING - Request failed (Attempt 2/3): HTTPSConnectionPool(host='cdn.pnj.io', port=443): Max retries exceeded with url: /images/giavang/tk_connect.json (Caused by NewConnectionError("HTTPSConnection(host='cdn.pnj.io', port=443): Failed to establish a new connection: [WinError 10065] A socket operation was attempted to an unreachable host"))
+2026-01-22 21:33:19,295 - WARNING - Request failed (Attempt 3/3): 403 Client Error: Forbidden for url: https://cdn.pnj.io/images/giavang/tk_connect.json
+2026-01-22 21:33:19,295 - ERROR - Request failed after 3 attempts: https://cdn.pnj.io/images/giavang/tk_connect.json
+2026-01-22 21:33:19,297 - INFO - Saved 0 new records to data/daily_prices.csv
