@@ -1,88 +1,149 @@
-# Daily Asset Price Collection Tool 📈
+# Daily Asset Price Collection Tool
 
-Công cụ tự động thu thập giá tài sản tài chính Việt Nam hàng ngày (Cổ phiếu, ETF, Chứng chỉ quỹ, Vàng) phục vụ phân tích thị trường và time-series forecasting.
+Automated daily price collection for Vietnamese financial assets (Stocks, ETFs, Open-end Funds, Gold).
 
-## 📋 Giới thiệu
+## Overview
 
-Dự án này được xây dựng để crawl dữ liệu giá đóng cửa (Close Price), NAV (cho quỹ) và giá vàng SJC mỗi ngày từ các nguồn public uy tín.
+This tool collects closing prices (for stocks/ETFs), NAV (for funds), and gold prices from public Vietnamese financial data sources.
 
-**Các tính năng chính:**
-*   🚀 **Đa nguồn:** Hỗ trợ thu thập từ VNDirect (Stocks/ETFs), CafeF/Fmarket (Funds), Webgia (Gold).
-*   💾 **Lưu trữ thông minh:** Dữ liệu lưu dạng CSV Append-only, tự động kiểm tra trùng lặp (Deduplication) theo ngày.
-*   🔄 **Tự động hóa:** Tích hợp sẵn hướng dẫn chạy tự động trên GitHub Actions hoặc Google Colab.
-*   🛡 **An toàn:** Cơ chế Retry, Delay và Logging chi tiết.
+### Current Status (as of Jan 2026)
 
-## 🗂 Cấu trúc dự án
+| Asset Type | Count | Working | Source | Status |
+|------------|-------|---------|--------|--------|
+| Stocks | 9 | 9/9 | VNDirect API | 100% |
+| ETFs | 3 | 3/3 | VNDirect API | 100% |
+| Funds | 17 | 2/17 | VNDirect API | 12% |
+| Gold | 2 | 0/2 | Blocked | 0% |
+| **Total** | **31** | **14/31** | - | **45%** |
+
+**Note:** Many Vietnamese financial websites block automated requests from cloud/server IPs. The tool is designed to collect what's available and clearly report what failed.
+
+## Features
+
+- **VNDirect API Integration**: Reliable source for stocks, ETFs, and some funds
+- **Smart Storage**: CSV append-only with deduplication by date
+- **Honest Reporting**: Clearly shows what data was collected vs. what failed
+- **Selenium Support**: Optional browser automation for blocked sites
+- **Retry & Logging**: Built-in error handling and detailed logs
+
+## Project Structure
 
 ```
 Asset-Price-Task/
 ├── data/
-│   ├── assets.csv             # Danh sách 31 tài sản cần theo dõi (Input)
-│   └── daily_prices.csv       # Dữ liệu giá thu thập được (Output)
+│   ├── assets.csv             # 31 asset definitions (input)
+│   └── daily_prices.csv       # Collected prices (output)
 ├── docs/
-│   ├── asset_source_mapping.md # Tài liệu nguồn dữ liệu
-│   ├── data_schema_design.md   # Thiết kế cấu trúc dữ liệu
-│   └── automation_setup.md     # Hướng dẫn setup chạy tự động
+│   ├── asset_source_mapping.md
+│   ├── data_schema_design.md
+│   └── automation_setup.md
 ├── src/
-│   ├── crawlers.py            # Logic cào dữ liệu (Stocks, Funds, Gold)
-│   ├── main.py                # Script chính điều phối luồng chạy
-│   └── utils.py               # Các hàm tiện ích (Request, Logging)
-├── .gitignore                 # File cấu hình Git ignore
-├── requirements.txt           # Thư viện Python yêu cầu
-└── README.md                  # Tài liệu hướng dẫn (File này)
+│   ├── crawlers.py            # StockCrawler, FundCrawler, GoldCrawler
+│   ├── main.py                # Main orchestrator
+│   └── utils.py               # Request helpers, retry, logging
+├── requirements.txt
+└── README.md
 ```
 
-## 🛠 Cài đặt & Sử dụng Local
+## Installation & Usage
 
-### 1. Yêu cầu
-*   Python 3.8+
-*   Git
+### Requirements
+- Python 3.8+
+- Git
 
-### 2. Cài đặt
-Clone repository và cài đặt thư viện:
-
+### Installation
 ```bash
-git clone <your-repo-url>
+git clone https://github.com/thethien8a/Asset-Price-Task
 cd Asset-Price-Task
 pip install -r requirements.txt
 ```
 
-### 3. Chạy thủ công
-Để thu thập dữ liệu giá cho ngày hiện tại:
-
+### Run Manually
 ```bash
 python -m src.main
 ```
 
-Dữ liệu mới sẽ được thêm vào file `data/daily_prices.csv`. Log quá trình chạy được ghi tại `crawler.log`.
+### Sample Output
+```
+============================================================
+COLLECTION SUMMARY
+============================================================
 
-## 🤖 Tự động hóa (Automation)
+Total assets in config: 31
+Successfully collected: 14
+Failed to collect: 17
+New records saved: 14
 
-Bạn có thể thiết lập để tool chạy tự động vào 00:00 UTC hàng ngày miễn phí.
+[OK] Collected (14):
+     HPG: 26,850 VND (VNDirect)
+     FPT: 103,500 VND (VNDirect)
+     ...
+     VESAF: 36,452 VND (VNDirect)
+     VEOF: 37,702 VND (VNDirect)
 
-*   👉 **[Xem hướng dẫn Setup GitHub Actions](docs/automation_setup.md)** (Khuyên dùng)
-*   👉 **[Xem hướng dẫn chạy trên Google Colab](docs/automation_setup.md)**
+[XX] Failed (17):
+     GOLD_SJC (gold)
+     VCBFMGF (fund)
+     ...
+```
 
-## 📊 Dữ liệu & Schema
+## Data Output
 
-Dữ liệu đầu ra được chuẩn hóa theo format sau:
+Data is saved to `data/daily_prices.csv` in this format:
 
 | date | asset_code | price | asset_name | asset_type | source |
 |------|------------|-------|------------|------------|--------|
-| 2023-10-27 | HPG | 26500.0 | Hoa Phat Group | stock | VNDirect |
-| 2023-10-27 | GOLD_SJC | 82500000.0 | SJC Gold Bar | gold | Webgia.com |
+| 2026-01-22 | HPG | 26850.0 | Hoa Phat Group | stock | VNDirect |
+| 2026-01-22 | VESAF | 36451.97 | VinaCapital Equity Special | fund | VNDirect |
 
-Chi tiết xem tại: [Data Schema Design](docs/data_schema_design.md).
+## What Works
 
-## 📝 Danh sách tài sản
-Project hiện theo dõi 31 mã tài sản bao gồm:
-*   **Stocks:** HPG, FPT, MBB, SSI, POW, VCG, DGC, VND, VTP...
-*   **ETFs:** FUEVFVND, E1VFVN30, FUESSVFL.
-*   **Funds:** VESAF, VEOF, VCBF-MGF, DCDS, DCDE...
-*   **Gold:** SJC Gold Bar, Gold Ring 9999.
+### VNDirect API (100% Working)
+- All 9 stocks: HPG, FPT, MBB, SSI, POW, VCG, DGC, VND, VTP
+- All 3 ETFs: FUEVFVND, E1VFVN30, FUESSVFL
+- 2 funds: VESAF, VEOF (listed on exchange)
 
-## 🤝 Đóng góp
-Nếu bạn phát hiện lỗi hoặc nguồn dữ liệu bị thay đổi, vui lòng sửa file `src/crawlers.py` hoặc tạo Issue mới.
+### Not Available via API
+Due to IP blocking/anti-bot protection:
+- 15 funds: VMEEF, VDEF, VIBF, VFF, VLGF, VCBFMGF, VCBFBCF, VCBFAIF, VCBFTBF, VCBFFIF, SSISCA, SSIBF, DCDS, DCDE, DCBF
+- 2 gold prices: GOLD_SJC, GOLD_RING
+
+## Solutions for Blocked Data
+
+1. **Use Selenium** (included in `crawlers.py`):
+   ```python
+   from src.crawlers import SeleniumFundCrawler
+   crawler = SeleniumFundCrawler()
+   results = crawler.crawl_vcbf()  # Crawl VCBF funds
+   crawler.close()
+   ```
+
+2. **Run from different network**: Home IP addresses may have better access
+
+3. **Use residential proxy**: Services like Bright Data, Oxylabs
+
+4. **Manual data entry**: Get prices from official fund manager websites
+
+## Assets Tracked
+
+### Stocks (9)
+HPG, FPT, MBB, SSI, POW, VCG, DGC, VND, VTP
+
+### ETFs (3)
+FUEVFVND, E1VFVN30, FUESSVFL
+
+### Open-end Funds (17)
+- VinaCapital: VESAF, VEOF, VMEEF, VDEF, VIBF, VFF, VLGF
+- VCBF: VCBFMGF, VCBFBCF, VCBFAIF, VCBFTBF, VCBFFIF
+- SSI: SSISCA, SSIBF
+- Dragon Capital: DCDS, DCDE, DCBF
+
+### Gold (2)
+GOLD_SJC (SJC Gold Bar), GOLD_RING (Gold Ring 9999)
+
+## Contributing
+
+If you find a working data source for the blocked assets, please update `src/crawlers.py` and submit a PR.
 
 ---
-*Project thực hiện bởi Antigravity (Opencode Agent).*
+*Built with Python. Data sources: VNDirect API.*
