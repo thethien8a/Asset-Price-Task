@@ -64,5 +64,7 @@ Thumbs.db
 # Project specific
 # Note: We keeps data/daily_prices.csv tracked as per requirement
 # But we ignore temporary data dumps if any
+giavang_debug.html
 temp/
 backup/
+.serena/
