@@ -68,3 +68,5 @@ giavang_debug.html
 temp/
 backup/
 .serena/
+credentials.json
+daily_prices.csv

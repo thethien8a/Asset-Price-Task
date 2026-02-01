@@ -73,7 +73,7 @@ class StockCrawler(BaseCrawler):
                             'asset_code': symbol,
                             'price': final_price,
                             'date': data_date,
-                            'source': 'VNDirect'
+                            'source': 'vndirect.com'
                         })
                         logging.info(f"  {symbol}: {final_price:,.0f} VND")
                     else:
@@ -136,14 +136,14 @@ class FmarketCrawler(BaseCrawler):
                     'asset_code': code,
                     'price': nav,
                     'date': today_str,
-                    'source': 'Fmarket'
+                    'source': 'fmarket.vn'
                 })
             elif short_name in list_assets:
                 results.append({
                     'asset_code': short_name,
                     'price': nav,
                     'date': today_str,
-                    'source': 'Fmarket'
+                    'source': 'fmarket.vn'
                 })
         
         if len(list_assets) != len(results):

@@ -5,6 +5,8 @@ from datetime import datetime
 import random
 import csv
 import os
+import gspread
+from oauth2client.service_account import ServiceAccountCredentials
 from config import DATA_FILE
 
 
@@ -65,8 +67,6 @@ def clean_price(price_str):
     except ValueError:
         return None
 
-
-
 def load_assets(filepath):
     """Load asset definitions from CSV file."""
     assets = []
@@ -76,6 +76,59 @@ def load_assets(filepath):
             assets.append(row)
     return assets
 
+def save_to_gsheet(new_data, sheet_name="Asset-Price-Tracker"):
+    """
+    Save data to Google Sheets with deduplication.
+    Requires credentials.json in the project root.
+    """
+    try:
+        # 1. Setup connection
+        scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
+        creds = ServiceAccountCredentials.from_json_keyfile_name('credentials.json', scope)
+        client = gspread.authorize(creds)
+
+        # 2. Open sheet
+        try:
+            sheet = client.open(sheet_name).sheet1
+        except gspread.SpreadsheetNotFound:
+            logging.error(f"Spreadsheet '{sheet_name}' not found. Make sure you shared it with the service account email.")
+            return 0
+
+        # 3. Get existing records for deduplication
+        all_values = sheet.get_all_records()
+        existing_keys = set()
+        for row in all_values:
+            date = str(row.get('date', '')).strip()
+            code = str(row.get('asset_code', '')).strip()
+            if date and code:
+                existing_keys.add((date, code))
+
+        # 4. Prepare data
+        fieldnames = ['date', 'asset_code', 'price', 'asset_name', 'asset_type', 'currency', 'source', 'crawl_time']
+        
+        if not all_values:
+            sheet.append_row(fieldnames)
+
+        rows_to_add = []
+        for item in new_data:
+            key = (str(item.get('date', '')), str(item.get('asset_code', '')))
+            if key not in existing_keys:
+                row = [item.get(f, "") for f in fieldnames]
+                rows_to_add.append(row)
+                existing_keys.add(key)
+
+        # 5. Batch update
+        if rows_to_add:
+            sheet.append_rows(rows_to_add)
+            logging.info(f"Added {len(rows_to_add)} new records to Google Sheet: {sheet_name}")
+        else:
+            logging.info("No new records to add to Google Sheet.")
+            
+        return len(rows_to_add)
+
+    except Exception as e:
+        logging.error(f"Error saving to Google Sheets: {e}")
+        return 0
 
 def save_data(new_data):
     """
@@ -86,9 +139,12 @@ def save_data(new_data):
     
     if file_exists:
         with open(DATA_FILE, mode='r', encoding='utf-8') as f:
-            reader = csv.DictReader(f)
+            reader = csv.DictReader(f, skipinitialspace=True)
             for row in reader:
-                existing_keys.add((row['date'], row['asset_code']))
+                d = row.get('date', '').strip() if row.get('date') else ""
+                c = row.get('asset_code', '').strip() if row.get('asset_code') else ""
+                if d and c:
+                    existing_keys.add((d, c))
     
     fieldnames = ['date', 'asset_code', 'price', 'asset_name', 'asset_type', 'currency', 'source', 'crawl_time']
     
@@ -100,7 +156,7 @@ def save_data(new_data):
             
         count = 0
         for item in new_data:
-            key = (item['date'], item['asset_code'])
+            key = (str(item.get('date', '')), str(item.get('asset_code', '')))
             if key not in existing_keys:
                 writer.writerow(item)
                 existing_keys.add(key)
@@ -109,4 +165,3 @@ def save_data(new_data):
         logging.info(f"Saved {count} new records to {DATA_FILE}")
     
     return count
-
